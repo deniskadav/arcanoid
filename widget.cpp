@@ -664,11 +664,13 @@ void Widget::on_start_button_clicked() // старт игры
     }
 
     int status = 0;
-    #ifdef Q_OS_WIN // кроссплатформенность
-    status = find_all_img("C:/",0);
-    #else
-    status = find_all_img("/sdcard",0);
-    status = find_all_img("/storage/extSdCard",0);
+	#if defined(Q_OS_WIN) // кроссплатформенность
+		status = find_all_img("C:/",0);
+	#elif defined(Q_OS_LINUX)
+		status = find_all_img("./",0);
+	#else
+		status = find_all_img("/sdcard",0);
+		status = find_all_img("/storage/extSdCard",0);
     #endif
 
     if (status == 0) // если не было кэша
@@ -1093,12 +1095,15 @@ void Widget::on_refresh_cache_clicked() // обновление кэша
     pixmap_array.clear();
     dirs_with_img.clear();
     dir_search = true;
-    #ifdef Q_OS_WIN // кроссплатформенность
-    find_all_img("C:/",1);
-    #else
-    find_all_img("/sdcard",1);
-    find_all_img("/storage/extSdCard",1);
-    #endif
+
+	#if defined(Q_OS_WIN) // кроссплатформенность
+		find_all_img("C:/",1);
+	#elif defined(Q_OS_LINUX)
+		find_all_img("./",1);
+	#else
+		find_all_img("/sdcard",1);
+		find_all_img("/storage/extSdCard",1);
+	#endif
 
     dir_search = false;
 
